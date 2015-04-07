@@ -116,10 +116,10 @@ describe('Module', function () {
 				SCRIPT_NAME: _.partial(php2html, 'env/SCRIPT_NAME.php')
 			}, function (err, results) {
 				var docrootfix = process.platform === 'win32' ? '\\' : '';
-				expect(results.DOCUMENT_ROOT).to.eql(process.cwd()+docrootfix);
+				expect(results.DOCUMENT_ROOT).to.eql(process.cwd() + docrootfix);
 				expect(results.PHP_SELF).to.eql('/env/PHP_SELF.php');
 				expect(results.REQUEST_URI).to.eql('/env/REQUEST_URI.php');
-				expect(results.SCRIPT_FILENAME).to.eql(path.join(process.cwd(),'env/SCRIPT_FILENAME.php'));
+				expect(results.SCRIPT_FILENAME).to.eql(path.join(process.cwd(), 'env/SCRIPT_FILENAME.php'));
 				expect(results.SCRIPT_NAME).to.eql('/env/SCRIPT_NAME.php');
 				done();
 			});
@@ -128,9 +128,8 @@ describe('Module', function () {
 });
 
 
-
 describe('CLI', function () {
-	describe('mocked', function(){
+	describe('mocked', function () {
 		beforeEach(function () {
 			this.origArgv = process.argv;
 			this.origExit = process.exit;
@@ -140,9 +139,9 @@ describe('CLI', function () {
 				useCleanCache: true
 			});
 
-			mockery.registerMock('./', function(file, opts, cb){
+			mockery.registerMock('./', function (file, opts, cb) {
 				this.mockOpts = opts;
-				cb(null,'');
+				cb(null, '');
 			}.bind(this));
 		});
 
@@ -201,31 +200,32 @@ describe('CLI', function () {
 			done();
 		});
 	});
-	describe('shell calls', function(){
+	describe('shell calls', function () {
 
-	it('should work well with the critical CSS file passed as an option', function (done) {
-		execFile('node', [
-			path.join(__dirname, '../', pkg.bin.php2html),
-			'fixtures/index.php'
-		],function(error,stdout){
-			/* jshint expr: true */
-			expect(error).to.not.exist;
-			expect(stdout).to.eql(read('expected/index.html'));
-			done();
-		});
-	});
-
-	it('should work well with the critical CSS file piped to critical', function (done) {
-		exec('cat fixtures/info.php | node ' + path.join(__dirname, '../', pkg.bin.php2html),function(error,stdout){
-			/* jshint expr: true */
-			expect(error).to.not.exist;
-			expect(stdout).to.contain('<title>phpinfo()</title>');
-			expect(stdout).to.contain('<h1 class="p">PHP Version');
-			done();
+		it('should work well with the php file passed as an option', function (done) {
+			execFile('node', [
+				path.join(__dirname, '../', pkg.bin.php2html),
+				'fixtures/index.php'
+			], function (error, stdout) {
+				/* jshint expr: true */
+				expect(error).to.not.exist;
+				expect(stdout).to.eql(read('expected/index.html'));
+				done();
+			});
 		});
 
+		it('should work well with the php file piped to php2html' +
+		'', function (done) {
+			exec('cat fixtures/info.php | node ' + path.join(__dirname, '../', pkg.bin.php2html), function (error, stdout) {
+				/* jshint expr: true */
+				expect(error).to.not.exist;
+				expect(stdout).to.contain('<title>phpinfo()</title>');
+				expect(stdout).to.contain('<h1 class="p">PHP Version');
+				done();
+			});
 
-	});
+
+		});
 
 	});
 });

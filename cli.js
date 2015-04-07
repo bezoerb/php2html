@@ -9,6 +9,8 @@ var stdin = require('get-stdin');
 var _ = require('lodash');
 var tmp = require('tmp');
 var php2html = require('./');
+var pkg = require('./package.json');
+var updateNotifier = require('update-notifier');
 var ok;
 
 var help = [
@@ -57,12 +59,18 @@ cli.flags = _.reduce(cli.flags, function (res, val, key) {
 	return res;
 }, {});
 
+
 if (cli.flags.getData) {
 	try {
 		cli.flags.getData = JSON.parse(cli.flags.getData);
 	} catch(err) {
 		error(err);
 	}
+}
+
+
+if (cli.flags['update-notifier'] !== false) {
+	updateNotifier({pkg: pkg}).notify();
 }
 
 function error(err) {
@@ -109,6 +117,9 @@ function run(data,cleanupCallback) {
 		error(err);
 	}
 }
+
+
+
 
 
 if (cli.input[0]) {
