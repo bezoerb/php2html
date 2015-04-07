@@ -28,7 +28,8 @@ describe('Module', function () {
 			php2html('nothing', function (error, data) {
 				/* jshint expr: true */
 				expect(data).to.not.exist;
-				expect(error.message).to.contain('ENOENT, no such file or directory');
+				expect(error.message).to.contain('ENOENT');
+				expect(error.message).to.contain('no such file or directory');
 				done();
 			});
 		});
