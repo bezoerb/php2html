@@ -12,6 +12,8 @@ var fs = require('fs');
 var win32 = process.platform === 'win32';
 
 
+
+
 module.exports = function (file, opts, cb) {
 	if (_.isFunction(opts) && !cb) {
 		cb = opts;
@@ -34,8 +36,23 @@ module.exports = function (file, opts, cb) {
 		return;
 	}
 
+	function verbose(){
+		if (!options.verbose) {
+			return;
+		}
+		var i = -1, l = arguments.length, args = [], fn = 'console.log(args)';
+		while(++i<l){
+			args.push('args['+i+']');
+		}
+		/* jshint -W054 */
+		fn = new Function('args',fn.replace(/args/,args.join(',')));
+		fn(arguments);
+	}
+
 
 	options.baseDir = path.resolve(options.baseDir);
+
+	verbose('Docroot', options.baseDir);
 
 	/**
 	 * Compute URI for gateway relative to docroot
@@ -43,10 +60,10 @@ module.exports = function (file, opts, cb) {
 	 * @param {string} file
 	 * @returns {string}
 	 */
-	var computeUri = function (docroot, file) {
+	var computeUri = function (docroot, file, strict) {
 		var uri;
 
-		if (!options.router) {
+		if (strict) {
 			var stat = fs.statSync(file);
 			// If file ends with a slash apend index file
 			if (stat.isDirectory()) {
@@ -79,11 +96,15 @@ module.exports = function (file, opts, cb) {
 	// rewrite requests to router if set
 	if (options.router) {
 		try {
-			var router = computeUri(options.baseDir, options.router);
+			var router = computeUri(options.baseDir, options.router, true);
+
+			verbose('Router script:',options.router);
+			verbose('Router rewrite:','^(.*)$ ' + router);
 			app.use(modRewrite([
 				'^(.*)$ ' + router
 			]));
 		} catch (err) {
+			verbose(err.message);
 			cb(err);
 		}
 	}
@@ -98,7 +119,7 @@ module.exports = function (file, opts, cb) {
 		var server = http.createServer(app).listen(port, function () {
 			var url;
 			try {
-				var uri = computeUri(options.baseDir, file);
+				var uri = computeUri(options.baseDir, file, !options.router);
 				url = 'http://' + host + ':' + port + uri;
 
 			} catch (err) {
@@ -109,6 +130,10 @@ module.exports = function (file, opts, cb) {
 			// $_GET data
 			if (_.isObject(options.getData) && _.size(options.getData)) {
 				url += '?' + qs.stringify(options.getData);
+			}
+
+			if (options.verbose) {
+				console.log('Requesting url:', url);
 			}
 
 			request(url, function (error, response, body) {
