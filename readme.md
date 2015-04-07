@@ -53,6 +53,12 @@ php2html('index.php', function(err,data){
 ~$ php2html index.php > index.html
 ```
 
+#### with router
+
+```shell
+php2html / --baseDir web --router web/app_dev.php > index.html
+```
+
 ```shell
 ~$ cat index.php | php2html > index.html
 ```
@@ -80,7 +86,7 @@ Specify a docroot for the php Server. All php files will be served relative to t
 Type: `String`
 Default value: `undefined`
 
-Use a router script.
+Use a router script. Useful for frameworks like `symfony`
 
 ##### processLinks
 Type: `Boolean`
