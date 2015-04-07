@@ -3,6 +3,12 @@ var expect = require('chai').expect;
 var path = require('path');
 var php2html = require('../');
 var fs = require('fs');
+var _ = require('lodash');
+var async = require('async');
+var mockery = require('mockery');
+var exec = require('child_process').exec;
+var pkg = require('../package.json');
+var execFile = require('child_process').execFile;
 
 process.chdir(path.resolve(__dirname));
 process.setMaxListeners(0);
@@ -100,6 +106,126 @@ describe('Module', function () {
 			});
 
 		});
+
+		it('should handle multiple parallel calls', function (done) {
+			async.parallel({
+				DOCUMENT_ROOT: _.partial(php2html, 'env/DOCUMENT_ROOT.php'),
+				PHP_SELF: _.partial(php2html, 'env/PHP_SELF.php'),
+				REQUEST_URI: _.partial(php2html, 'env/REQUEST_URI.php'),
+				SCRIPT_FILENAME: _.partial(php2html, 'env/SCRIPT_FILENAME.php'),
+				SCRIPT_NAME: _.partial(php2html, 'env/SCRIPT_NAME.php')
+			}, function (err, results) {
+				var docrootfix = process.platform === 'win32' ? '\\' : '';
+				expect(results.DOCUMENT_ROOT).to.eql(process.cwd()+docrootfix);
+				expect(results.PHP_SELF).to.eql('/env/PHP_SELF.php');
+				expect(results.REQUEST_URI).to.eql('/env/REQUEST_URI.php');
+				expect(results.SCRIPT_FILENAME).to.eql(path.join(process.cwd(),'env/SCRIPT_FILENAME.php'));
+				expect(results.SCRIPT_NAME).to.eql('/env/SCRIPT_NAME.php');
+				done();
+			});
+		});
+	});
+});
+
+
+
+describe('CLI', function () {
+	describe('mocked', function(){
+		beforeEach(function () {
+			this.origArgv = process.argv;
+			this.origExit = process.exit;
+
+			mockery.enable({
+				warnOnUnregistered: false,
+				useCleanCache: true
+			});
+
+			mockery.registerMock('./', function(file, opts, cb){
+				this.mockOpts = opts;
+				cb(null,'');
+			}.bind(this));
+		});
+
+		afterEach(function () {
+			mockery.resetCache();
+			mockery.deregisterAll();
+			mockery.disable();
+			process.argv = this.origArgv;
+			process.exit = this.origExit;
+		});
+
+		it('should pass the correct opts when using short opts', function () {
+			process.argv = [
+				'node',
+				path.join(__dirname, '../', pkg.bin.php2html),
+				'/mocked',
+				'-b', 'BASE',
+				'-r', 'ROUTER',
+				'-p', 'PROCESS',
+				'-g', JSON.stringify({mocked: true})
+			];
+
+			require('../cli');
+
+			expect(this.mockOpts.baseDir).to.eql('BASE');
+			expect(this.mockOpts.router).to.eql('ROUTER');
+			expect(this.mockOpts.processLinks).to.eql('PROCESS');
+			expect(this.mockOpts.getData).to.eql({mocked: true});
+		});
+
+		it('should pass the correct opts when using long opts', function () {
+			process.argv = [
+				'node',
+				path.join(__dirname, '../', pkg.bin.php2html),
+				'/mocked',
+				'--baseDir', 'BASE',
+				'--router', 'ROUTER',
+				'--processLinks', 'PROCESS',
+				'--getData', JSON.stringify({mocked: true})
+			];
+
+			require('../cli');
+
+			expect(this.mockOpts.baseDir).to.eql('BASE');
+			expect(this.mockOpts.router).to.eql('ROUTER');
+			expect(this.mockOpts.processLinks).to.eql('PROCESS');
+			expect(this.mockOpts.getData).to.eql({mocked: true});
+		});
 	});
 
+	it('should return the version', function (done) {
+		var cp = execFile('node', [path.join(__dirname, '../', pkg.bin.php2html), '--version', '--no-update-notifier']);
+
+		cp.stdout.on('data', function (data) {
+			expect(data.replace(/\r\n|\n/g, '')).to.eql(pkg.version);
+			done();
+		});
+	});
+	describe('shell calls', function(){
+
+	it('should work well with the critical CSS file passed as an option', function (done) {
+		execFile('node', [
+			path.join(__dirname, '../', pkg.bin.php2html),
+			'fixtures/index.php'
+		],function(error,stdout){
+			/* jshint expr: true */
+			expect(error).to.not.exist;
+			expect(stdout).to.eql(read('expected/index.html'));
+			done();
+		});
+	});
+
+	it('should work well with the critical CSS file piped to critical', function (done) {
+		exec('cat fixtures/info.php | node ' + path.join(__dirname, '../', pkg.bin.php2html),function(error,stdout){
+			/* jshint expr: true */
+			expect(error).to.not.exist;
+			expect(stdout).to.contain('<title>phpinfo()</title>');
+			expect(stdout).to.contain('<h1 class="p">PHP Version');
+			done();
+		});
+
+
+	});
+
+	});
 });

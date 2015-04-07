@@ -74,6 +74,10 @@ function error(err) {
 
 function prepare(data) {
 	tmp.file({dir: cli.flags.baseDir || process.cwd(), prefix: '.cli-temp-', postfix: '.php'},function (err, filepath,fd, cleanupCallback) {
+		process.on('exit', function(){
+			cleanupCallback();
+		});
+
 		if (err) {
 			error(err);
 		} else {
