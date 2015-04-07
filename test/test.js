@@ -225,7 +225,7 @@ describe('CLI', function () {
 		});
 
 		it('should fail if the piped file contains "__FILE__" or "__DIR__"', function (done) {
-			exec('cat fixtures/index.php | node ' + path.join(__dirname, '../', pkg.bin.php2html), function (error, stdout) {
+			exec('cat fixtures/index.php | node ' + path.join(__dirname, '../', pkg.bin.php2html), function (error) {
 				expect(error.message).to.contain('Error: "__FILE__" detected. This can\'t be resolved for piped content.');
 				done();
 			});
