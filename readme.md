@@ -70,18 +70,23 @@ Type: `string`
 
 #### options
 
+##### baseDir
+Type: `String`
+Default value: process.cwd()
+
+Specify a docroot for the php Server. All php files will be served relative to this directory.
+
+##### router
+Type: `String`
+Default value: `undefined`
+
+Use a router script.
 
 ##### processLinks
 Type: `Boolean`
 Default value: `false`
 
 Convert internal links pointing to `.php` pages to the `.html` equivalent.
-
-##### baseDir
-Type: `String`
-Default value: process.cwd()
-
-Specify a docroot for the php Server. All php files will be served relative to this directory.
 
 ##### getData
 Type: `Object`
