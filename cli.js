@@ -4,6 +4,7 @@ var os = require('os');
 var fs = require('fs');
 var path = require('path');
 var meow = require('meow');
+var chalk = require('chalk');
 var indentString = require('indent-string');
 var stdin = require('get-stdin');
 var _ = require('lodash');
@@ -17,10 +18,10 @@ var help = [
 	'Usage: php2html <input> [<option>]',
 	'',
 	'Options:',
-	'   -b, --baseDir           Your base directory',
-	'   -r, --router            Specify router script',
-	'   -p, --processLinks      Convert links pointing to .php pages to the .html equivalent.',
-	'   -g, --getData      		Pass data to php file using $_GET.'
+	'   -b, --baseDir        Your base directory',
+	'   -r, --router         Specify router script',
+	'   -p, --processLinks   Convert links pointing to .php pages to the .html equivalent.',
+	'   -g, --getData        Pass data to php file using $_GET.'
 ].join('\n');
 
 var cli = meow({
@@ -74,13 +75,21 @@ if (cli.flags['update-notifier'] !== false) {
 }
 
 function error(err) {
-	process.stderr.write(indentString(err.message || err, '   Error: '));
+	process.stderr.write(indentString(chalk.red(err.message || err), '   ' + chalk.red('Error: ')));
 	process.stderr.write(os.EOL);
 	process.stderr.write(indentString(help, '   '));
 	process.exit(1);
 }
 
 function prepare(data) {
+	// check for references to original file
+	var check = data.match(/(__DIR__)|(__FILE__)/);
+	if (check) {
+		error(new Error('"' + _.compact(_.rest(check)).join('" and "') + '" detected. This can\'t be resolved for piped content.'));
+		return;
+	}
+
+
 	tmp.file({dir: cli.flags.baseDir || process.cwd(), prefix: '.cli-temp-', postfix: '.php'},function (err, filepath,fd, cleanupCallback) {
 		process.on('exit', function(){
 			cleanupCallback();

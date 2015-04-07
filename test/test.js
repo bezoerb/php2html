@@ -214,8 +214,7 @@ describe('CLI', function () {
 			});
 		});
 
-		it('should work well with the php file piped to php2html' +
-		'', function (done) {
+		it('should work well with the php file piped to php2html', function (done) {
 			exec('cat fixtures/info.php | node ' + path.join(__dirname, '../', pkg.bin.php2html), function (error, stdout) {
 				/* jshint expr: true */
 				expect(error).to.not.exist;
@@ -223,8 +222,13 @@ describe('CLI', function () {
 				expect(stdout).to.contain('<h1 class="p">PHP Version');
 				done();
 			});
+		});
 
-
+		it('should fail if the piped file contains "__FILE__" or "__DIR__"', function (done) {
+			exec('cat fixtures/index.php | node ' + path.join(__dirname, '../', pkg.bin.php2html), function (error, stdout) {
+				expect(error.message).to.contain('Error: "__FILE__" detected. This can\'t be resolved for piped content.');
+				done();
+			});
 		});
 
 	});
