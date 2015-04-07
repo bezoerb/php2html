@@ -1,0 +1,1 @@
+<?php print_r(htmlspecialchars($_SERVER['PHP_SELF'], ENT_QUOTES, 'utf-8'));

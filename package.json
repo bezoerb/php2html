@@ -1,0 +1,50 @@
+{
+  "name": "php2html",
+  "version": "0.0.0",
+  "description": "Convert php files to html",
+  "license": "MIT",
+  "repository": "bezoerb/php2html",
+  "author": {
+    "name": "Ben Zörb",
+    "email": "ben@sommerlaune.com",
+    "url": "sommerlaune.com"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "jshint . && mocha test/test.js"
+  },
+  "files": [
+    "index.js"
+  ],
+  "bin": {
+    "php2html": "cli.js"
+  },
+  "keywords": [
+    "php",
+    "convert",
+    "html"
+  ],
+  "dependencies": {
+    "bluebird": "^2.9.24",
+    "connect": "^3.3.5",
+    "connect-modrewrite": "^0.7.11",
+    "gateway": "^1.0.0",
+    "get-port": "^1.0.0",
+    "get-stdin": "^4.0.1",
+    "htmlhint": "^0.9.7",
+    "indent-string": "^1.2.1",
+    "lodash": "^3.6.0",
+    "meow": "^3.1.0",
+    "qs": "^2.4.1",
+    "request": "^2.55.0",
+    "tempfile": "^1.1.0",
+    "tmp": "0.0.25"
+  },
+  "devDependencies": {
+    "chai": "^2.2.0",
+    "jshint": "^2.6.3",
+    "mocha": "*"
+  }
+}
