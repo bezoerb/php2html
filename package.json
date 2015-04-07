@@ -16,8 +16,10 @@
     "test": "jshint . && mocha test/test.js"
   },
   "files": [
+    "cli.js",
     "index.js"
   ],
+  "preferGlobal": true,
   "bin": {
     "php2html": "cli.js"
   },
