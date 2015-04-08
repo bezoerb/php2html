@@ -100,6 +100,11 @@ Default value: `{}`
 
 Pass data to php file using $_GET.
 
+##### port
+Type: `Int`
+Default value: `undefined`
+
+`php2html` will use a random for port to fetch content. Use this option to manually specify the port.   
 
 ## License
 

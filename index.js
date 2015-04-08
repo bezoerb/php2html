@@ -49,6 +49,14 @@ module.exports = function (file, opts, cb) {
 		fn(arguments);
 	}
 
+	function fetchPort(cb) {
+		if (options.port) {
+			cb(null, options.port);
+		} else {
+			getPort(cb);
+		}
+	}
+
 
 	options.baseDir = path.resolve(options.baseDir);
 
@@ -114,7 +122,7 @@ module.exports = function (file, opts, cb) {
 	}));
 
 
-	getPort(function (err, port) {
+	fetchPort(function (err, port) {
 
 		var server = http.createServer(app).listen(port, function () {
 			var url;
