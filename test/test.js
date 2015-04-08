@@ -49,6 +49,16 @@ describe('Module', function () {
 				done();
 			});
 		});
+
+		it('should fail on unprocessable files', function (done) {
+			php2html('fixtures/nophp.txt', function (error, data) {
+				/* jshint expr: true */
+				expect(data).to.not.exist;
+				/* jshint expr: true */
+				expect(error).to.exist;
+				done();
+			});
+		});
 	});
 
 	describe('without errors', function () {

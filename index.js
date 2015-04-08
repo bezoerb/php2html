@@ -146,8 +146,13 @@ module.exports = function (file, opts, cb) {
 					return;
 				}
 
+				if (response.statusCode >= 400) {
+					var message = response.statusCode + ' - ' + response.statusMessage;
+					server.close(function () {
+						cb(new Error(message));
+					});
 				// 204 No Content
-				if (!body) {
+				} else if (!body) {
 					server.close(function () {
 						cb(new Error('204 - No Content'));
 					});
