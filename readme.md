@@ -37,6 +37,11 @@ Here is how you can add the binary to your PATH: [Link](https://www.monosnap.com
 sudo apt-get install php5-cgi
 ```
 
+## Build plugins
+
+- [grunt-php2html](https://github.com/bezoerb/grunt-php2html)
+- [gulp-php2html](https://github.com/bezoerb/gulp-php2html)
+
 ## Usage
 
 ```js
