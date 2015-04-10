@@ -4,17 +4,20 @@ var path = require('path');
 var php2html = require('../');
 var fs = require('fs');
 var _ = require('lodash');
+var shell = require('shelljs');
 var async = require('async');
 var mockery = require('mockery');
-var exec = require('child_process').exec;
+var normalizeNewline = require('normalize-newline');
 var pkg = require('../package.json');
 var execFile = require('child_process').execFile;
+
+var skipWin = process.platform === 'win32'? it.skip : it;
 
 process.chdir(path.resolve(__dirname));
 process.setMaxListeners(0);
 
 function read(file) {
-	return fs.readFileSync(file, 'utf-8');
+	return normalizeNewline(fs.readFileSync(file, 'utf-8'));
 }
 
 
@@ -67,8 +70,8 @@ describe('Module', function () {
 			php2html('fixtures/info.php', function (error, data) {
 				/* jshint expr: true */
 				expect(error).to.not.exist;
-				expect(data).to.contain('<title>phpinfo()</title>');
-				expect(data).to.contain('<h1 class="p">PHP Version');
+				expect(normalizeNewline(data)).to.contain('<title>phpinfo()</title>');
+				expect(normalizeNewline(data)).to.contain('<h1 class="p">PHP Version');
 				done();
 			});
 		});
@@ -77,7 +80,7 @@ describe('Module', function () {
 			php2html('fixtures/index.php', function (error, data) {
 				/* jshint expr: true */
 				expect(error).to.be.null;
-				expect(data).to.eql(read('expected/index.html'));
+				expect(normalizeNewline(data)).to.eql(read('expected/index.html'));
 				done();
 			});
 		});
@@ -87,7 +90,7 @@ describe('Module', function () {
 				function (error, data) {
 					/* jshint expr: true */
 					expect(error).to.not.exist;
-					expect(data).to.eql(read('expected/index.processLinks.html'));
+					expect(normalizeNewline(data)).to.eql(read('expected/index.processLinks.html'));
 					done();
 				});
 		});
@@ -98,7 +101,7 @@ describe('Module', function () {
 			}, function (error, data) {
 				/* jshint expr: true */
 				expect(error).to.not.exist;
-				expect(data).to.eql(read('expected/get.html'));
+				expect(normalizeNewline(data)).to.eql(read('expected/get.html'));
 				done();
 			});
 
@@ -111,7 +114,7 @@ describe('Module', function () {
 				/* jshint expr: true */
 				expect(error).to.not.exist;
 
-				expect(data).to.eql('/myroute');
+				expect(normalizeNewline(data)).to.eql('/myroute');
 				done();
 			});
 
@@ -125,8 +128,7 @@ describe('Module', function () {
 				SCRIPT_FILENAME: _.partial(php2html, 'env/SCRIPT_FILENAME.php'),
 				SCRIPT_NAME: _.partial(php2html, 'env/SCRIPT_NAME.php')
 			}, function (err, results) {
-				var docrootfix = process.platform === 'win32' ? '\\' : '';
-				expect(results.DOCUMENT_ROOT).to.eql(process.cwd() + docrootfix);
+				expect(results.DOCUMENT_ROOT).to.eql(process.cwd());
 				expect(results.PHP_SELF).to.eql('/env/PHP_SELF.php');
 				expect(results.REQUEST_URI).to.eql('/env/REQUEST_URI.php');
 				expect(results.SCRIPT_FILENAME).to.eql(path.join(process.cwd(), 'env/SCRIPT_FILENAME.php'));
@@ -212,6 +214,7 @@ describe('CLI', function () {
 	});
 	describe('shell calls', function () {
 
+
 		it('should work well with the php file passed as an option', function (done) {
 			execFile('node', [
 				path.join(__dirname, '../', pkg.bin.php2html),
@@ -219,24 +222,25 @@ describe('CLI', function () {
 			], function (error, stdout) {
 				/* jshint expr: true */
 				expect(error).to.not.exist;
-				expect(stdout).to.eql(read('expected/index.html'));
+				expect(normalizeNewline(stdout)).to.eql(read('expected/index.html'));
 				done();
 			});
 		});
 
-		it('should work well with the php file piped to php2html', function (done) {
-			exec('cat fixtures/info.php | node ' + path.join(__dirname, '../', pkg.bin.php2html), function (error, stdout) {
+		skipWin('should work well with the php file piped to php2html', function (done) {
+			shell.exec('cat fixtures/info.php | node ' + path.join(__dirname, '../', pkg.bin.php2html), {silent:true}, function (code, output) {
 				/* jshint expr: true */
-				expect(error).to.not.exist;
-				expect(stdout).to.contain('<title>phpinfo()</title>');
-				expect(stdout).to.contain('<h1 class="p">PHP Version');
+				expect(code).to.eql(0);
+				expect(output).to.contain('<title>phpinfo()</title>');
+				expect(output).to.contain('<h1 class="p">PHP Version');
 				done();
 			});
 		});
 
-		it('should fail if the piped file contains "__FILE__" or "__DIR__"', function (done) {
-			exec('cat fixtures/index.php | node ' + path.join(__dirname, '../', pkg.bin.php2html), function (error) {
-				expect(error.message).to.contain('Error: "__FILE__" detected. This can\'t be resolved for piped content.');
+		skipWin('should fail if the piped file contains "__FILE__" or "__DIR__"', function (done) {
+			shell.exec('cat fixtures/index.php | node ' + path.join(__dirname, '../', pkg.bin.php2html), {silent:true}, function (code, output) {
+				expect(code).to.not.eql(0);
+				expect(output).to.contain('Error: "__FILE__" detected. This can\'t be resolved for piped content.');
 				done();
 			});
 		});

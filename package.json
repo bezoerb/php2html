@@ -49,8 +49,10 @@
   },
   "devDependencies": {
     "chai": "^2.2.0",
-    "mockery": "^1.4.0",
     "jshint": "^2.6.3",
-    "mocha": "*"
+    "mocha": "*",
+    "mockery": "^1.4.0",
+    "normalize-newline": "^1.0.2",
+    "shelljs": "^0.4.0"
   }
 }
