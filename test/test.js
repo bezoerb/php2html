@@ -204,7 +204,7 @@ describe('CLI', function () {
 		});
 	});
 
-	// seems to time out 
+	// seems to time out
 	skipWin('should return the version', function (done) {
 		var cp = execFile('node', [path.join(__dirname, '../', pkg.bin.php2html), '--version', '--no-update-notifier']);
 

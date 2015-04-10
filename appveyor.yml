@@ -30,7 +30,6 @@ matrix:
   fast_finish: true
 
 cache:
-  - '%LOCALAPPDATA%\Temp\phantomjs -> package.json' # phantomjs download location
   - '%APPDATA%\npm\node_modules -> package.json'    # global npm modules
   - '%APPDATA%\npm-cache -> package.json'           # npm cache
   - 'node_modules -> package.json'                  # local npm modules
