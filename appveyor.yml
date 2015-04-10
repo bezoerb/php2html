@@ -15,7 +15,7 @@ environment:
 
 install:
   - cinst php
-  - SET PATH=C:\php\;%PATH%
+  - SET PATH=C:\tools\php\;%PATH%
   - ps: Install-Product node $env:nodejs_version
   - npm install -g grunt-cli
   - npm install
