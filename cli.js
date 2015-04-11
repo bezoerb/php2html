@@ -25,13 +25,15 @@ var help = [
 ].join('\n');
 
 var cli = meow({
-	help: help
+	help: help,
+	pkg: pkg
 }, {
 	alias: {
 		b: 'baseDir',
 		r: 'router',
 		p: 'processLinks',
-		g: 'getData'
+		g: 'getData',
+		v: 'version'
 	}
 });
 
