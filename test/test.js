@@ -4,7 +4,7 @@ var path = require('path');
 var php2html = require('../');
 var fs = require('fs');
 var _ = require('lodash');
-var shell = require('shelljs');
+var exec = require('child_process').exec;
 var async = require('async');
 var mockery = require('mockery');
 var normalizeNewline = require('normalize-newline');
@@ -204,17 +204,17 @@ describe('CLI', function () {
 		});
 	});
 
-	// seems to time out
-	skipWin('should return the version', function (done) {
-		var cp = execFile('node', [path.join(__dirname, '../', pkg.bin.php2html), '--version', '--no-update-notifier']);
 
-		cp.stdout.on('data', function (data) {
-			expect(data.replace(/\r\n|\n/g, '')).to.eql(pkg.version);
-			done();
-		});
-	});
 	describe('shell calls', function () {
-
+		// seems to time out
+		it('should return the version', function (done) {
+			execFile('node', [path.join(__dirname, '../', pkg.bin.php2html), '--version', '--no-update-notifier'], function(error, stdout){
+				/* jshint expr: true */
+				expect(error).to.not.exist;
+				expect(stdout.replace(/\r\n|\n/g, '')).to.eql(pkg.version);
+				done();
+			});
+		});
 
 		it('should work well with the php file passed as an option', function (done) {
 			execFile('node', [
@@ -228,20 +228,21 @@ describe('CLI', function () {
 			});
 		});
 
+		// no "cat" available for windows
 		skipWin('should work well with the php file piped to php2html', function (done) {
-			shell.exec('cat fixtures/info.php | node ' + path.join(__dirname, '../', pkg.bin.php2html), {silent:true}, function (code, output) {
+			exec('cat fixtures/info.php | node ' + path.join(__dirname, '../', pkg.bin.php2html), function (error, stdout) {
 				/* jshint expr: true */
-				expect(code).to.eql(0);
-				expect(output).to.contain('<title>phpinfo()</title>');
-				expect(output).to.contain('<h1 class="p">PHP Version');
+				expect(error).to.not.exist;
+				expect(stdout).to.contain('<title>phpinfo()</title>');
+				expect(stdout).to.contain('<h1 class="p">PHP Version');
 				done();
 			});
 		});
 
+		// no "cat" available for windows
 		skipWin('should fail if the piped file contains "__FILE__" or "__DIR__"', function (done) {
-			shell.exec('cat fixtures/index.php | node ' + path.join(__dirname, '../', pkg.bin.php2html), {silent:true}, function (code, output) {
-				expect(code).to.not.eql(0);
-				expect(output).to.contain('Error: "__FILE__" detected. This can\'t be resolved for piped content.');
+			exec('cat fixtures/index.php | node ' + path.join(__dirname, '../', pkg.bin.php2html), function (error) {
+				expect(error.message).to.contain('Error: "__FILE__" detected. This can\'t be resolved for piped content.');
 				done();
 			});
 		});
