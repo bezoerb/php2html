@@ -10,7 +10,7 @@ var qs = require('qs');
 var _ = require('lodash');
 var fs = require('fs');
 var win32 = process.platform === 'win32';
-
+var shell = require('shelljs');
 
 
 
@@ -23,6 +23,14 @@ module.exports = function (file, opts, cb) {
 	if (!cb) {
 		cb = function () {};
 	}
+
+
+	// check dependency
+	if (!shell.which('php-cgi')) {
+		var error = new Error('"php-cgi" not found. See https://github.com/bezoerb/php2html#installing-php-cgi');
+		cb(error);
+	}
+
 	var host = '127.0.0.1';
 	var app = connect();
 	var options = _.defaults(opts || {}, {
