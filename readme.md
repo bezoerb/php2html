@@ -58,16 +58,17 @@ php2html('index.php', function(err,data){
 ```shell
 ~$ php2html index.php > index.html
 ```
+```shell
+~$ cat index.php | php2html > index.html
+```
 
-#### with router
+
+#### with router (for use with frameworks like symfony or yii)
 
 ```shell
 php2html / --baseDir web --router web/app_dev.php > index.html
 ```
 
-```shell
-~$ cat index.php | php2html > index.html
-```
 
 
 ## API
