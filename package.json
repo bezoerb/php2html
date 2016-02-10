@@ -34,6 +34,7 @@
     "chalk": "^1.0.0",
     "connect": "^3.3.5",
     "connect-modrewrite": "^0.7.11",
+    "debug": "^2.2.0",
     "gateway": "^1.0.0",
     "get-port": "^1.0.0",
     "get-stdin": "^4.0.1",
