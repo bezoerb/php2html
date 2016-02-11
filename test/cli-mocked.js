@@ -1,7 +1,6 @@
 import test from 'ava';
 import path from 'path';
 import mockery from 'mockery';
-import Promise from 'Bluebird';
 import 'babel-core/register';
 
 test.beforeEach(t => {
