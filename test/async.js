@@ -1,8 +1,9 @@
 import test from 'ava';
 import path from 'path';
-import partial from 'lodash/function/partial';
+import partial from 'lodash/partial';
 import async from 'async';
-import fn from '../';
+import 'babel-core/register';
+import fn from '../src/index';
 
 test.cb('handle multiple parallel calls', t =>
     async.parallel({
