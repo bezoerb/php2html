@@ -13,16 +13,16 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "jshint . && mocha test/test.js --timeout 100000"
+    "compile": "babel -d lib/ src/",
+    "prepublish": "npm run compile",
+    "test": "ava"
   },
   "files": [
-    "cli.js",
-    "index.js"
+    "lib/cli.js",
+    "lib/index.js"
   ],
   "preferGlobal": true,
-  "bin": {
-    "php2html": "cli.js"
-  },
+  "bin": "cli.js",
   "keywords": [
     "php",
     "convert",
@@ -30,7 +30,7 @@
   ],
   "dependencies": {
     "async": "^0.9.0",
-    "bluebird": "^2.9.24",
+    "bluebird": "^2.10.2",
     "chalk": "^1.0.0",
     "connect": "^3.3.5",
     "connect-modrewrite": "^0.7.11",
@@ -50,11 +50,18 @@
     "update-notifier": "^0.3.1"
   },
   "devDependencies": {
-    "chai": "^2.2.0",
-    "jshint": "^2.6.3",
-    "mocha": "*",
     "mockery": "^1.4.0",
     "normalize-newline": "^1.0.2",
+    "pify": "^2.3.0",
+    "read-package-json": "^2.0.3",
     "shelljs": "^0.4.0"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  },
+  "xo": {
+    "space": 4
   }
 }
