@@ -15,7 +15,7 @@
   "scripts": {
     "compile": "babel -d ./ src/",
     "prepublish": "npm run compile",
-    "test": "xo && ava"
+    "test": "npm run compile && xo && ava"
   },
   "files": [
     "cli.js",

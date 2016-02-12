@@ -84,6 +84,10 @@ function error(err) {
 }
 
 function prepare(data) {
+    if (Boolean(process.stdin.isTTY)) {
+        cli.showHelp();
+    }
+
     // check for references to original file
     let check = data.match(/(__DIR__)|(__FILE__)/);
     if (check) {
@@ -97,31 +101,25 @@ function prepare(data) {
         postfix: '.php'
     }, function (err, filepath, fd, cleanupCallback) {
         process.on('exit', cleanupCallback);
+        process.on('cleanup', cleanupCallback);
+        process.on('uncaughtException', cleanupCallback);
 
         if (err) {
             error(err);
         } else {
-            fs.writeFile(filepath, data, (err) => err && error(err) || run(filepath, cleanupCallback));
+            fs.writeFile(filepath, data, (err) => err && error(err) || run(filepath));
         }
     });
 }
 
-function run(data, cleanupCallback) {
-    try {
-        php2html(data, cli.flags)
-            .then(val => process.stdout.write(val))
-            .catch(err => error(err));
-    } catch (err) {
-        if (cleanupCallback) {
-            cleanupCallback();
-        }
-        error(err);
-    }
+function run(data) {
+    php2html(data, cli.flags)
+        .then(val => process.stdout.write(val))
+        .catch(err => error(err));
 }
 
 if (cli.input[0]) {
     run(path.resolve(cli.input[0]));
 } else {
-    let timeout = setTimeout(cli.showHelp, 100);
-    stdin().then(data => clearTimeout(timeout) && prepare(data));
+    stdin().then(prepare);
 }

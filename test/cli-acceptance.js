@@ -3,7 +3,6 @@ import readPkg from 'read-package-json';
 import nn from 'normalize-newline';
 import cp from 'child_process';
 import fs from 'fs';
-import 'babel-core/register';
 
 let read = (file, cb) => fs.readFile(file, 'utf-8', (err, data) => cb(err, nn(data)));
 
