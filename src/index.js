@@ -118,7 +118,7 @@ let fetchHtml = (url, opts) => new Promise((resolve, reject) => {
         // replace relative php links with corresponding html link
         if (body && opts.processLinks) {
             let linkRegex = /href=['"]([^'"]+\.php(?:\?[^'"]*)?)['"]/gm;
-            body.match(linkRegex).forEach(link => {
+            (body.match(linkRegex) || []).forEach(link => {
                 if (link.match(/:\/\//)) {
                     return;
                 }
