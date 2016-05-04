@@ -1,4 +1,4 @@
-# php2html [![Build Status](https://travis-ci.org/bezoerb/php2html.svg?branch=master)](https://travis-ci.org/bezoerb/php2html)  [![Build status](https://ci.appveyor.com/api/projects/status/sjr47tktyxnp7ewt?svg=true)](https://ci.appveyor.com/project/bezoerb/php2html)
+# php2html [![Build Status](https://travis-ci.org/bezoerb/php2html.svg?branch=master)](https://travis-ci.org/bezoerb/php2html)  [![Build status](https://ci.appveyor.com/api/projects/status/sjr47tktyxnp7ewt?svg=true)](https://ci.appveyor.com/project/bezoerb/php2html) [![Coverage Status](https://coveralls.io/repos/github/bezoerb/php2html/badge.svg?branch=master)](https://coveralls.io/github/bezoerb/php2html?branch=master)
 
 
 > Convert php files to html

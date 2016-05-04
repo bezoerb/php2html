@@ -1,9 +1,10 @@
 sudo: false
 language: node_js
 node_js:
-  - '0.12'
+  - '6'
+  - '5'
   - '4'
-  - 'stable'
+  - '0.12'
 
 addons:
   apt:
@@ -13,3 +14,6 @@ addons:
 
 before_install:
   - php-cgi --version
+
+after_success:
+  - './node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls'
