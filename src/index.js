@@ -86,6 +86,13 @@ let getConnect = opts => {
         }
     }
 
+    if (opts.requestHost) {
+        app.use((req, res, next) => {
+            req.headers.host = opts.requestHost.replace(/^https?:\/\//, '');
+            next();
+        });
+    }
+
     app.use(gateway(opts.baseDir, {
         '.php': 'php-cgi'
     }));
@@ -184,7 +191,8 @@ export default function php2html(file, opts, cb) {
             throw new Promise.CancellationError();
         }).then(output => {
             cb(null, output.toString());
-        }).catch(Promise.CancellationError, () => {});
+        }).catch(Promise.CancellationError, () => {
+        });
     } else {
         return corePromise;
     }

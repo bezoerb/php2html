@@ -111,7 +111,13 @@ Pass data to php file using $_GET.
 Type: `Int`
 Default value: `undefined`
 
-`php2html` will use a random for port to fetch content. Use this option to manually specify the port.   
+`php2html` will use a random for port to fetch content. Use this option to manually specify the port. 
+  
+##### requestHost
+Type: `String`
+Default value: `undefined`
+
+USe this option to tweak the request host passed to the `.php` script as `SERVER_NAME` and `SERVER_PORT`.   
 
 ## License
 
