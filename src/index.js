@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs';
 import http from 'http';
 import connect from 'connect';
 import modRewrite from 'connect-modrewrite';
@@ -7,7 +8,6 @@ import gateway from 'gateway';
 import getPort from 'get-port';
 import debugFn from 'debug';
 import qs from 'qs';
-import fs from 'fs';
 import shell from 'shelljs';
 
 import size from 'lodash/size';

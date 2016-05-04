@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 
-import php2html from './';
 import os from 'os';
 import fs from 'fs';
 import path from 'path';
@@ -15,6 +14,7 @@ import reduce from 'lodash/reduce';
 import readPkgUp from 'read-pkg-up';
 import tmp from 'tmp';
 import updateNotifier from 'update-notifier';
+import php2html from './';
 
 let pkg = readPkgUp.sync().pkg;
 
@@ -84,7 +84,7 @@ function error(err) {
 }
 
 function prepare(data) {
-    if (Boolean(process.stdin.isTTY)) {
+    if (process.stdin.isTTY) {
         cli.showHelp();
     }
 

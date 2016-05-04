@@ -1,5 +1,5 @@
-import test from 'ava';
 import fs from 'fs';
+import test from 'ava';
 import nn from 'normalize-newline';
 import 'babel-core/register';
 import fn from '../src/index';
@@ -9,8 +9,8 @@ let read = (file, cb) => fs.readFile(file, 'utf-8', (err, data) => cb(err, nn(da
 test.cb('generate phpinfo html', t =>
     fn('fixtures/info.php', (err, data) => {
         t.is(err, null);
-        t.ok(/<title>phpinfo\(\)<\/title>/.test(nn(data)));
-        t.ok(/<h1 class="p">PHP Version/.test(nn(data)));
+        t.truthy(/<title>phpinfo\(\)<\/title>/.test(nn(data)));
+        t.truthy(/<h1 class="p">PHP Version/.test(nn(data)));
         t.end();
     })
 );
@@ -39,7 +39,7 @@ test.cb('consider "processLinks" option', t =>
     })
 );
 
-test.cb('consider "processLinks" option', t =>
+test.cb('consider "getData" option', t =>
     fn('fixtures/get.php', {getData: {test: 42, arr: [1, 2, 3, 4], obj: {a: 1, b: 2, c: 3}}}, (err, data) => {
         t.is(err, null);
 
@@ -58,12 +58,3 @@ test.cb('use router script', t =>
         t.end();
     })
 );
-
-test.cb('use router script', t =>
-    fn('/myroute', {router: 'fixtures/router.php'}, (err, data) => {
-        t.is(err, null);
-        t.is(nn(data), '/myroute');
-        t.end();
-    })
-);
-
