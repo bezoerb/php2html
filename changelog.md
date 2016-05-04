@@ -1,4 +1,28 @@
 
+v0.2.0 / 2016-05-05
+===================
+
+  * added coveralls
+  * bump deps
+  * Add option to tweak $_SERVER['SERVER_NAME'] (#15)
+
+v0.1.1 / 2016-03-10
+===================
+
+  * minor fix
+
+v0.1.0 / 2016-02-12
+===================
+
+  * smarter cli
+  * ES2015
+  * switch tests to ava
+  * Added error on missing php-cgi
+  * fixed one windows test
+  * more mocha time for appveyor
+  * Appveyor config
+  * Fixed tests for windows
+
 0.0.7 / 2015-04-08
 ==================
 
