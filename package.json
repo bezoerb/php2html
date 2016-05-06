@@ -17,15 +17,16 @@
     "prepublish": "npm run compile",
     "test": "xo && nyc ava"
   },
-  "files": [
-    "*.js"
-  ],
   "preferGlobal": true,
   "bin": "cli.js",
   "keywords": [
     "php",
     "convert",
     "html"
+  ],
+  "files": [
+    "index.js",
+    "cli.js"
   ],
   "dependencies": {
     "async": "^1.5.2",
