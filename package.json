@@ -10,23 +10,24 @@
     "url": "sommerlaune.com"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=0.12.0"
   },
   "scripts": {
-    "compile": "babel -d ./ src/",
-    "prepublish": "npm run compile",
-    "test": "xo && nyc ava"
+    "test": "xo && npm run prepublish && nyc ava",
+    "prepublish": "babel src --out-dir=dist",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "preferGlobal": true,
-  "bin": "cli.js",
+  "main": "dist/index.js",
+  "bin": "dist/cli.js",
+  "files": [
+    "dist"
+  ],
+
   "keywords": [
     "php",
     "convert",
     "html"
-  ],
-  "files": [
-    "index.js",
-    "cli.js"
   ],
   "dependencies": {
     "async": "^1.5.2",
@@ -65,9 +66,14 @@
   },
   "xo": {
     "space": 4,
+    "esnext": true,
     "ignores": [
       "index.js",
       "cli.js"
     ]
+  },
+  "babel": {
+    "presets": ["es2015"],
+    "retainLines": true
   }
 }
