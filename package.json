@@ -1,6 +1,6 @@
 {
   "name": "php2html",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Convert php files to html",
   "license": "MIT",
   "repository": "bezoerb/php2html",
@@ -23,7 +23,6 @@
   "files": [
     "dist"
   ],
-
   "keywords": [
     "php",
     "convert",
@@ -72,7 +71,9 @@
     ]
   },
   "babel": {
-    "presets": ["es2015"],
+    "presets": [
+      "es2015"
+    ],
     "retainLines": true
   }
 }
