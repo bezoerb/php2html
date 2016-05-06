@@ -1,5 +1,5 @@
 node_modules
-index.js
-cli.js
+#index.js
+#cli.js
 .nyc_output
 coverage
