@@ -14,6 +14,7 @@ environment:
       platform: x86
 
 install:
+  - ps: Set-Service wuauserv -StartupType Manual
   - cinst -y php -i
   - SET PATH=C:\tools\php72\;%PATH%
   - ps: Install-Product node $env:nodejs_version $env:platform
