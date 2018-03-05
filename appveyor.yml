@@ -14,7 +14,7 @@ environment:
       platform: x86
 
 install:
-  - cinst -y php --version 7.0.9
+  - cinst -y php -i
   - SET PATH=C:\tools\php72\;%PATH%
   - ps: Install-Product node $env:nodejs_version $env:platform
   - npm install
