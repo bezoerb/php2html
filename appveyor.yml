@@ -1,29 +1,33 @@
 # http://www.appveyor.com/docs/appveyor-yml
 
-version: "{build}"
-
 clone_depth: 10
 
-init:
-  - git config --global core.autocrlf false
+version: "{build}"
 
 environment:
   matrix:
     - nodejs_version: "6"
+      platform: x86
+    - nodejs_version: "7"
+      platform: x86
     - nodejs_version: "8"
+      platform: x86
 
 install:
   - cinst php
   - SET PATH=C:\tools\php\;%PATH%
-  - ps: Install-Product node $env:nodejs_version
+  - ps: Install-Product node $env:nodejs_version $env:platform
   - npm install
 
 build: off
 
+matrix:
+  fast_finish: true
+
 test_script:
   - node --version && npm --version
-  - npm test
-
+  - ps: "npm test # PowerShell" # Pass comment to PS for easier debugging
+  - cmd: npm test
 
 cache:
   - 'node_modules -> appveyor.yml,package.json,package-lock.json'
