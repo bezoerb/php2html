@@ -16,7 +16,6 @@ install:
   - cinst php
   - SET PATH=C:\tools\php\;%PATH%
   - ps: Install-Product node $env:nodejs_version
-  - npm update -g npm
   - npm install
 
 build: off
@@ -25,10 +24,6 @@ test_script:
   - node --version && npm --version
   - npm test
 
-matrix:
-  fast_finish: true
 
 cache:
-  - '%APPDATA%\npm\node_modules -> package.json'    # global npm modules
-  - '%APPDATA%\npm-cache -> package.json'           # npm cache
-  - 'node_modules -> package.json'                  # local npm modules
+  - 'node_modules -> appveyor.yml,package.json,package-lock.json'
