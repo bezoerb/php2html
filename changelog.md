@@ -1,4 +1,10 @@
 
+v1.0.0 / 2018-03-06
+==================
+
+  * Bump dependencies
+  * drop node < 6 support
+
 v0.2.0 / 2016-05-05
 ===================
 
@@ -31,20 +37,20 @@ v0.1.0 / 2016-02-12
 
 0.0.6 / 2015-04-07
 ==================
- 
+
   * Catch more failures (statusCode >= 400)
 
 
 0.0.5 / 2015-04-07
 ==================
- 
-  * Fixed relative path bug 
+
+  * Fixed relative path bug
 
 
 0.0.4 / 2015-04-07
 ==================
- 
-  * tweaked package.json 
+
+  * tweaked package.json
 
 
 0.0.3 / 2015-04-07
