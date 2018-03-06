@@ -1,6 +1,6 @@
 {
   "name": "php2html",
-  "version": "0.2.4",
+  "version": "1.0.0",
   "description": "Convert php files to html",
   "license": "MIT",
   "repository": "bezoerb/php2html",
@@ -13,7 +13,7 @@
     "node": ">=6"
   },
   "scripts": {
-    "test": "xo && nyc ava",    
+    "test": "xo && nyc ava",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "preferGlobal": true,
