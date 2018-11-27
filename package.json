@@ -25,36 +25,36 @@
     "html"
   ],
   "dependencies": {
-    "async": "^2.6.0",
+    "async": "^2.6.1",
     "bluebird": "^3.2.2",
-    "chalk": "^2.3.2",
+    "chalk": "^2.4.1",
     "connect": "^3.3.5",
     "connect-modrewrite": "^0.10.2",
-    "debug": "^3.1.0",
+    "debug": "^4.1.0",
     "gateway": "^1.0.0",
-    "get-port": "^3.2.0",
+    "get-port": "^4.0.0",
     "get-stdin": "^6.0.0",
     "htmlhint": "^0.10.0",
     "indent-string": "^3.2.0",
     "lodash": "^4.3.0",
-    "meow": "^4.0.0",
+    "meow": "^5.0.0",
     "qs": "^6.1.0",
-    "read-pkg-up": "^3.0.0",
+    "read-pkg-up": "^4.0.0",
     "request": "^2.55.0",
-    "shelljs": "^0.8.1",
+    "shelljs": "^0.8.3",
     "tempfile": "^2.0.0",
     "tmp": "0.0.33",
-    "update-notifier": "^2.3.0"
+    "update-notifier": "^2.5.0"
   },
   "devDependencies": {
-    "ava": "^0.25.0",
-    "coveralls": "^3.0.0",
+    "ava": "^1.0.0-rc.2",
+    "coveralls": "^3.0.2",
     "mockery": "^2.1.0",
     "normalize-newline": "^3.0.0",
-    "nyc": "^11.4.1",
-    "pify": "^3.0.0",
+    "nyc": "^13.1.0",
+    "pify": "^4.0.1",
     "read-package-json": "^2.0.3",
-    "xo": "^0.20.3"
+    "xo": "^0.23.0"
   },
   "xo": {
     "space": 2
