@@ -1,58 +1,65 @@
-const cp = require('child_process');
 const fs = require('fs');
+const path = require('path');
 const test = require('ava');
-const readPkg = require('read-package-json');
+const execa = require('execa');
+const readPkgUp = require('read-pkg-up');
 const nn = require('normalize-newline');
 
-const read = (file, cb) => fs.readFile(file, 'utf-8', (err, data) => cb(err, nn(data)));
+process.chdir(path.resolve(__dirname));
 
-process.chdir(__dirname);
-
-test.cb.beforeEach(t =>
-  readPkg('../package.json', (err, pkg) => {
-    t.is(err, null);
-    t.context.bin = '../' + pkg.bin.php2html;
-    t.context.version = pkg.version;
-    t.end();
-  })
-);
-
-test.cb('return the version', t => {
-  cp.execFile('node', [t.context.bin, '--version', '--no-update-notifier'], (err, stdout) => {
-    t.is(err, null);
-    t.is(stdout.replace(/\r\n|\n/g, ''), t.context.version);
-    t.end();
-  });
-});
-
-test.cb('work well with the php file passed as an option', t => {
-  cp.execFile('node', [t.context.bin, 'fixtures/index.php'], (err, stdout) => {
-    t.is(err, null);
-
-    read('expected/index.html', (err, expected) => {
-      t.is(err, null);
-      t.is(nn(stdout), expected);
-      t.end();
+const read = file =>
+  new Promise((resolve, reject) => {
+    fs.readFile(path.join(__dirname, file), 'utf-8', (error, data) => {
+      if (error) {
+        reject(error);
+      }
+      resolve(nn(data));
     });
   });
+
+const getBin = async () => {
+  const {pkg} = await readPkgUp();
+  return path.join(__dirname, '../', pkg.bin.php2html);
+};
+
+const run = async (args = []) => {
+  const bin = await getBin();
+  return execa('node', [bin, ...args]);
+};
+
+const pipe = async cmd => {
+  const bin = await getBin();
+  return execa.shell(`${cmd} | node ${bin}`);
+};
+
+test('return the version', async t => {
+  const {pkg} = await readPkgUp();
+  const {stderr, stdout} = await run(['--version', '--no-update-notifier']);
+  t.falsy(stderr);
+  t.is(stdout.replace(/\r\n|\n/g, ''), pkg.version);
 });
 
-test.cb('work well with the php file piped to php2html', t => {
-  cp.exec('cat fixtures/info.php | node ' + t.context.bin, (err, stdout) => {
-    t.is(err, null);
-    t.truthy(/<title>phpinfo\(\)<\/title>/.test(nn(stdout)));
-    t.truthy(/<h1 class="p">PHP Version/.test(nn(stdout)));
-    t.end();
-  });
+test('work well with the php file passed as an option', async t => {
+  const expected = await read('expected/index.html');
+  const {stderr, stdout} = await run(['fixtures/index.php']);
+  t.falsy(stderr);
+  t.is(nn(`${stdout}\r\n`), expected);
 });
 
-test.cb('fail if the piped file contains "__FILE__" or "__DIR__"', t => {
-  t.plan(4);
-  cp.exec('cat fixtures/index.php | node ' + t.context.bin, (err, stdout, stderr) => {
-    t.truthy(err);
-    t.truthy(stderr);
-    t.falsy(stdout);
-    t.truthy(/Error: "__FILE__" detected. This can't be resolved for piped content./.test(stderr));
-    t.end();
-  });
+test('work well with the php file piped to php2html', async t => {
+  const {stderr, stdout} = await pipe('cat fixtures/info.php');
+  t.falsy(stderr);
+  t.truthy(/<title>phpinfo\(\)<\/title>/.test(nn(stdout)));
+  t.truthy(/<h1 class="p">PHP Version/.test(nn(stdout)));
+});
+
+test('fail if the piped file contains "__FILE__" or "__DIR__"', async t => {
+  t.plan(3);
+  try {
+    await pipe('cat fixtures/index.php');
+  } catch (error) {
+    t.falsy(error.stdout);
+    t.truthy(error.stderr);
+    t.truthy(/Error: "__FILE__" detected. This can't be resolved for piped content./.test(error.stderr));
+  }
 });

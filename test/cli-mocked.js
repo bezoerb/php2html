@@ -10,7 +10,7 @@ test.beforeEach(t => {
   t.context.bin = '../cli.js';
   mockery.enable({
     warnOnUnregistered: false,
-    useCleanCache: true
+    useCleanCache: true,
   });
 
   mockery.registerMock('.', (file, opts) => {
@@ -32,10 +32,13 @@ test.serial('pass the correct opts when using short opts', t => {
     'node',
     path.resolve(t.context.bin),
     '/mocked',
-    '-b', 'BASE',
-    '-r', 'ROUTER',
+    '-b',
+    'BASE',
+    '-r',
+    'ROUTER',
     '-p',
-    '-g', JSON.stringify({mocked: true})
+    '-g',
+    JSON.stringify({mocked: true}),
   ];
 
   require(t.context.bin);
@@ -51,10 +54,13 @@ test.serial('pass the correct opts when using long opts', t => {
     'node',
     path.resolve(t.context.bin),
     '/mocked',
-    '--baseDir', 'BASE',
-    '--router', 'ROUTER',
+    '--baseDir',
+    'BASE',
+    '--router',
+    'ROUTER',
     '--processLinks',
-    '--getData', JSON.stringify({mocked: true})
+    '--getData',
+    JSON.stringify({mocked: true}),
   ];
 
   require(t.context.bin);

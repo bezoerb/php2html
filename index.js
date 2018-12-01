@@ -23,15 +23,16 @@ const host = '127.0.0.1';
 /**
  * Get configured port or free port
  * @param {object} opts options passed to php2html
+ * @returns {int} Free port
  */
-const fetchPort = opts => opts.port ? new Bluebird(resolve => resolve(opts.port)) : getPort();
+const fetchPort = opts => (opts.port ? new Bluebird(resolve => resolve(opts.port)) : getPort());
 
 /**
  * Compute URI for gateway relative to docroot
- * @param {string} docroot
- * @param {string} file
- * @param {bool} strict
- * @returns {string}
+ * @param {string} docroot Document root
+ * @param {string} file Filename
+ * @param {bool} strict Strict mode
+ * @returns {string} Uri
  */
 const getUri = (docroot, file, strict) => {
   const win32 = process.platform === 'win32';
@@ -66,6 +67,7 @@ const getUri = (docroot, file, strict) => {
 /**
  * Get connect app
  * @param {object} opts options hash passed to php2html
+ * @returns {object} connect app
  */
 const getConnect = opts => {
   const app = connect();
@@ -77,12 +79,10 @@ const getConnect = opts => {
 
       debug('Router script:', opts.router);
       debug('Router rewrite:', '^(.*)$ ' + router);
-      app.use(modRewrite([
-        '^(.*)$ ' + router
-      ]));
-    } catch (err) {
-      debug('ERROR:', err.message);
-      return new Bluebird((resolve, reject) => reject(err));
+      app.use(modRewrite(['^(.*)$ ' + router]));
+    } catch (error) {
+      debug('ERROR:', error.message);
+      return new Bluebird((resolve, reject) => reject(error));
     }
   }
 
@@ -93,50 +93,54 @@ const getConnect = opts => {
     });
   }
 
-  app.use(gateway(opts.baseDir, {
-    '.php': 'php-cgi'
-  }));
+  app.use(
+    gateway(opts.baseDir, {
+      '.php': 'php-cgi',
+    })
+  );
 
   return app;
 };
 
 /**
  * Fetch html from
- * @param url
- * @param opts
+ * @param {string} url Url
+ * @param {object} opts Options
+ * @returns {Promise} Request promise resolves with response string
  */
-const fetchHtml = (url, opts) => new Bluebird((resolve, reject) => {
-  request(url, (error, response, body) => {
-    // Request failed
-    if (error) {
-      return reject(error);
-    }
+const fetchHtml = (url, opts) =>
+  new Bluebird((resolve, reject) => {
+    request(url, (error, response, body) => {
+      // Request failed
+      if (error) {
+        return reject(error);
+      }
 
-    if (response.statusCode >= 400) {
-      const message = response.statusCode + ' - ' + response.statusMessage;
-      return reject(new Error(message));
-    }
+      if (response.statusCode >= 400) {
+        const message = response.statusCode + ' - ' + response.statusMessage;
+        return reject(new Error(message));
+      }
 
-    // 204 No Content
-    if (!body) {
-      return reject(new Error('204 - No Content'));
-    }
+      // 204 No Content
+      if (!body) {
+        return reject(new Error('204 - No Content'));
+      }
 
-    // Replace relative php links with corresponding html link
-    if (body && opts.processLinks) {
-      const linkRegex = /href=['"]([^'"]+\.php(?:\?[^'"]*)?)['"]/gm;
-      (body.match(linkRegex) || []).forEach(link => {
-        if (link.match(/:\/\//)) {
-          return;
-        }
-        const hlink = link.replace(/(\w)\.php([^\w])/g, '$1.html$2');
+      // Replace relative php links with corresponding html link
+      if (body && opts.processLinks) {
+        const linkRegex = /href=['"]([^'"]+\.php(?:\?[^'"]*)?)['"]/gm;
+        (body.match(linkRegex) || []).forEach(link => {
+          if (link.match(/:\/\//)) {
+            return;
+          }
+          const hlink = link.replace(/(\w)\.php([^\w])/g, '$1.html$2');
 
-        body = body.replace(link, hlink);
-      });
-    }
-    resolve(body);
-  }).end();
-});
+          body = body.replace(link, hlink);
+        });
+      }
+      resolve(body);
+    }).end();
+  });
 
 function compile(file, opts) {
   // Check php-cgi dependency
@@ -150,12 +154,17 @@ function compile(file, opts) {
   }
 
   return fetchPort(opts)
-    .then(port => new Bluebird((resolve, reject) => {
-      const app = getConnect(opts);
-      const server = http.createServer(app).listen(port)
-        .on('error', reject)
-        .on('listening', () => resolve({server, port}));
-    }))
+    .then(
+      port =>
+        new Bluebird((resolve, reject) => {
+          const app = getConnect(opts);
+          const server = http
+            .createServer(app)
+            .listen(port)
+            .on('error', reject)
+            .on('listening', () => resolve({server, port}));
+        })
+    )
     .then(({server, port}) => {
       const uri = getUri(opts.baseDir, file, !opts.router);
       let url = 'http://' + host + ':' + port + uri;
@@ -164,9 +173,7 @@ function compile(file, opts) {
       }
       return {server, url};
     })
-    .then(({server, url}) =>
-      fetchHtml(url, opts).finally(() => server.close())
-    );
+    .then(({server, url}) => fetchHtml(url, opts).finally(() => server.close()));
 }
 
 function php2html(file, opts, cb) {
@@ -178,7 +185,7 @@ function php2html(file, opts, cb) {
   const options = defaults(opts || {}, {
     processLinks: false,
     getData: {},
-    baseDir: process.cwd()
+    baseDir: process.cwd(),
   });
 
   options.baseDir = path.resolve(options.baseDir);
@@ -186,13 +193,16 @@ function php2html(file, opts, cb) {
   const corePromise = compile(file, options);
 
   if (isFunction(cb)) {
-    corePromise.catch(err => {
-      cb(err);
-      throw new Bluebird.CancellationError();
-    }).then(output => {
-      cb(null, output.toString());
-    }).catch(Bluebird.CancellationError, () => {
-    });
+    // eslint-disable-next-line promise/valid-params
+    corePromise
+      .catch(error => {
+        cb(error);
+        throw new Bluebird.CancellationError();
+      })
+      .then(output => {
+        cb(null, output.toString());
+      })
+      .catch(Bluebird.CancellationError, () => {});
   } else {
     return corePromise;
   }
