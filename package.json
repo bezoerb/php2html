@@ -34,7 +34,7 @@
     "gateway": "^1.0.0",
     "get-port": "^4.0.0",
     "get-stdin": "^6.0.0",
-    "htmlhint": "^0.10.0",
+    "htmlhint": "^0.10.1",
     "indent-string": "^3.2.0",
     "lodash": "^4.3.0",
     "meow": "^5.0.0",
