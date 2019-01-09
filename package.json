@@ -27,12 +27,12 @@
   "dependencies": {
     "async": "^2.6.1",
     "bluebird": "^3.2.2",
-    "chalk": "^2.4.1",
+    "chalk": "^2.4.2",
     "connect": "^3.3.5",
     "connect-modrewrite": "^0.10.2",
-    "debug": "^4.1.0",
+    "debug": "^4.1.1",
     "gateway": "^1.0.0",
-    "get-port": "^4.0.0",
+    "get-port": "^4.1.0",
     "get-stdin": "^6.0.0",
     "htmlhint": "^0.10.0",
     "indent-string": "^3.2.0",
@@ -46,7 +46,7 @@
     "update-notifier": "^2.5.0"
   },
   "devDependencies": {
-    "ava": "^1.0.0-rc.2",
+    "ava": "^1.0.1",
     "coveralls": "^3.0.2",
     "execa": "^1.0.0",
     "mockery": "^2.1.0",
