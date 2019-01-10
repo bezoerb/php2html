@@ -49,8 +49,7 @@ test('work well with the php file passed as an option', async t => {
 test('work well with the php file piped to php2html', async t => {
   const {stderr, stdout} = await pipe('cat fixtures/info.php');
   t.falsy(stderr);
-  t.truthy(/<title>phpinfo\(\)<\/title>/.test(nn(stdout)));
-  t.truthy(/<h1 class="p">PHP Version/.test(nn(stdout)));
+  t.truthy(/<title>.*phpinfo\(\).*<\/title>/.test(nn(stdout)));
 });
 
 test('fail if the piped file contains "__FILE__" or "__DIR__"', async t => {
