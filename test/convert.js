@@ -10,8 +10,7 @@ process.chdir(__dirname);
 test.cb('generate phpinfo html', t =>
   fn('fixtures/info.php', (err, data) => {
     t.is(err, null);
-    t.truthy(/<title>phpinfo\(\)<\/title>/.test(nn(data)));
-    t.truthy(/<h1 class="p">PHP Version/.test(nn(data)));
+    t.truthy(/<title>.*phpinfo\(\).*<\/title>/.test(nn(data)));
     t.end();
   })
 );
