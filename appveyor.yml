@@ -17,6 +17,7 @@ install:
   - ps: Set-Service wuauserv -StartupType Manual
   - cinst -y php -i
   - SET PATH=C:\tools\php72\;%PATH%
+  - SET PATH=C:\tools\php73\;%PATH%
   - ps: Install-Product node $env:nodejs_version $env:platform
   - npm install
 
