@@ -60,7 +60,9 @@
   "xo": {
     "space": 2,
     "prettier": true,
-    "rules": {}
+    "rules": {
+      "promise/prefer-await-to-then": "off"
+    }
   },
   "prettier": {
     "trailingComma": "es5",
