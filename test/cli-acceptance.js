@@ -13,12 +13,13 @@ const read = file =>
       if (error) {
         reject(error);
       }
+
       resolve(nn(data));
     });
   });
 
 const getBin = async () => {
-  const {pkg} = await readPkgUp();
+  const {package: pkg} = await readPkgUp();
   return path.join(__dirname, '../', pkg.bin.php2html);
 };
 
@@ -33,7 +34,7 @@ const pipe = async cmd => {
 };
 
 test('return the version', async t => {
-  const {pkg} = await readPkgUp();
+  const {package: pkg} = await readPkgUp();
   const {stderr, stdout} = await run(['--version', '--no-update-notifier']);
   t.falsy(stderr);
   t.is(stdout.replace(/\r\n|\n/g, ''), pkg.version);

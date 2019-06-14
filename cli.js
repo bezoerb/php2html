@@ -16,7 +16,7 @@ const tmp = require('tmp');
 const updateNotifier = require('update-notifier');
 const php2html = require('.');
 
-const {pkg} = readPkgUp.sync();
+const {package: pkg} = readPkgUp.sync();
 
 const help = [
   'Usage: php2html <input> [<option>]',

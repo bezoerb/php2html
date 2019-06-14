@@ -133,11 +133,13 @@ const fetchHtml = (url, opts) =>
           if (link.match(/:\/\//)) {
             return;
           }
+
           const hlink = link.replace(/(\w)\.php([^\w])/g, '$1.html$2');
 
           body = body.replace(link, hlink);
         });
       }
+
       resolve(body);
     }).end();
   });
@@ -171,6 +173,7 @@ function compile(file, opts) {
       if (isObject(opts.getData) && size(opts.getData)) {
         url += '?' + qs.stringify(opts.getData);
       }
+
       return {server, url};
     })
     .then(({server, url}) => fetchHtml(url, opts).finally(() => server.close()));
