@@ -21,10 +21,7 @@ The `php-cgi` binary can be installed via Homebrew by tapping the
 [homebrew-php](https://github.com/josegonzalez/homebrew-php) repository:
 
 ```shell
-brew tap homebrew/dupes
-brew tap homebrew/versions
-brew tap homebrew/homebrew-php
-brew install php56
+brew install php@7.3
 ```
 
 ##### Windows
@@ -35,7 +32,7 @@ Here is how you can add the binary to your PATH: [Link](https://www.monosnap.com
 ##### Ubuntu
 
 ```shell
-sudo apt-get install php5-cgi
+sudo apt-get install php-cgi
 ```
 
 ## Build plugins
