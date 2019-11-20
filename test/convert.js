@@ -7,15 +7,15 @@ const read = (file, cb) => fs.readFile(file, 'utf-8', (err, data) => cb(err, nn(
 
 process.chdir(__dirname);
 
-test.cb('generate phpinfo html', t =>
+test.cb('generate phpinfo html', t => {
   fn('fixtures/info.php', (err, data) => {
     t.is(err, null);
-    t.truthy(/<title>.*phpinfo\(\).*<\/title>/.test(nn(data)));
+    t.regex(nn(data), /<title>.*phpinfo\(\).*<\/title>/);
     t.end();
-  })
-);
+  });
+});
 
-test.cb('generate index html', t =>
+test.cb('generate index html', t => {
   fn('fixtures/index.php', (err, data) => {
     t.is(err, null);
 
@@ -24,10 +24,10 @@ test.cb('generate index html', t =>
       t.is(nn(data), expected);
       t.end();
     });
-  })
-);
+  });
+});
 
-test.cb('consider "processLinks" option', t =>
+test.cb('consider "processLinks" option', t => {
   fn('fixtures/index.php', {processLinks: true}, (err, data) => {
     t.is(err, null);
 
@@ -36,10 +36,10 @@ test.cb('consider "processLinks" option', t =>
       t.is(nn(data), expected);
       t.end();
     });
-  })
-);
+  });
+});
 
-test.cb('consider "getData" option', t =>
+test.cb('consider "getData" option', t => {
   fn('fixtures/get.php', {getData: {test: 42, arr: [1, 2, 3, 4], obj: {a: 1, b: 2, c: 3}}}, (err, data) => {
     t.is(err, null);
 
@@ -48,13 +48,13 @@ test.cb('consider "getData" option', t =>
       t.is(nn(data), expected);
       t.end();
     });
-  })
-);
+  });
+});
 
-test.cb('use router script', t =>
+test.cb('use router script', t => {
   fn('/myroute', {router: 'fixtures/router.php'}, (err, data) => {
     t.is(err, null);
     t.is(nn(data), '/myroute');
     t.end();
-  })
-);
+  });
+});

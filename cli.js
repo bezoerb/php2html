@@ -16,7 +16,7 @@ const tmp = require('tmp');
 const updateNotifier = require('update-notifier');
 const php2html = require('.');
 
-const {package: pkg} = readPkgUp.sync();
+const {packageJson} = readPkgUp.sync();
 
 const help = [
   'Usage: php2html <input> [<option>]',
@@ -30,7 +30,7 @@ const help = [
 
 const cli = meow({
   help,
-  pkg,
+  packageJson,
   flags: {
     baseDir: {
       type: 'string',
@@ -87,7 +87,7 @@ if (cli.flags.getData) {
 }
 
 if (cli.flags['update-notifier'] !== false) {
-  updateNotifier({pkg}).notify();
+  updateNotifier({pkg: packageJson}).notify();
 }
 
 function logError(err) {

@@ -57,7 +57,7 @@ const getUri = (docroot, file, strict) => {
   }
 
   // Ensure that we have an absolute url
-  if (uri.substr(0, 1) !== '/') {
+  if (!uri.startsWith('/')) {
     uri = '/' + uri;
   }
 

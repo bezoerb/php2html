@@ -19,7 +19,7 @@ const read = file =>
   });
 
 const getBin = async () => {
-  const {package: pkg} = await readPkgUp();
+  const {packageJson: pkg} = await readPkgUp();
   return path.join(__dirname, '../', pkg.bin.php2html);
 };
 
@@ -30,11 +30,11 @@ const run = async (args = []) => {
 
 const pipe = async cmd => {
   const bin = await getBin();
-  return execa.shell(`${cmd} | node ${bin}`);
+  return execa(`${cmd} | node ${bin}`, {shell: true});
 };
 
 test('return the version', async t => {
-  const {package: pkg} = await readPkgUp();
+  const {packageJson: pkg} = await readPkgUp();
   const {stderr, stdout} = await run(['--version', '--no-update-notifier']);
   t.falsy(stderr);
   t.is(stdout.replace(/\r\n|\n/g, ''), pkg.version);
@@ -50,7 +50,7 @@ test('work well with the php file passed as an option', async t => {
 test('work well with the php file piped to php2html', async t => {
   const {stderr, stdout} = await pipe('cat fixtures/info.php');
   t.falsy(stderr);
-  t.truthy(/<title>.*phpinfo\(\).*<\/title>/.test(nn(stdout)));
+  t.regex(nn(stdout), /<title>.*phpinfo\(\).*<\/title>/);
 });
 
 test('fail if the piped file contains "__FILE__" or "__DIR__"', async t => {
@@ -60,6 +60,6 @@ test('fail if the piped file contains "__FILE__" or "__DIR__"', async t => {
   } catch (error) {
     t.falsy(error.stdout);
     t.truthy(error.stderr);
-    t.truthy(/Error: "__FILE__" detected. This can't be resolved for piped content./.test(error.stderr));
+    t.regex(error.stderr, /Error: "__FILE__" detected. This can't be resolved for piped content./);
   }
 });
