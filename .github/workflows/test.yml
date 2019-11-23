@@ -5,7 +5,7 @@ env:
 
 jobs:
   run:
-    name: Node ${{ matrix.node }} with {{ matrix.php }} on ${{ matrix.os }}
+    name: Node ${{ matrix.node }} with ${{ matrix.php }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -53,6 +53,6 @@ jobs:
 
       - name: Run Coveralls
         uses: coverallsapp/github-action@master
-        if: startsWith(matrix.os, 'ubuntu') && matrix.node == 10
+        if: startsWith(matrix.os, 'ubuntu') && matrix.node == 10 && matrix.php == '7.2'
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
