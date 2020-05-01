@@ -14,7 +14,9 @@
   },
   "scripts": {
     "test": "xo && nyc ava",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "preferGlobal": true,
   "main": "index.js",
@@ -43,7 +45,8 @@
     "shelljs": "^0.8.3",
     "tempfile": "^3.0.0",
     "tmp": "^0.1.0",
-    "update-notifier": "^3.0.1"
+    "update-notifier": "^3.0.1",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "ava": "^2.4.0",
@@ -69,5 +72,6 @@
     "singleQuote": true,
     "printWidth": 120,
     "bracketSpacing": false
-  }
+  },
+  "snyk": true
 }
