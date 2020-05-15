@@ -1,12 +1,12 @@
-import path from 'path';
-import test from 'ava';
-import partial from 'lodash/partial';
-import async from 'async';
-import fn from '..';
+const path = require('path');
+const test = require('ava');
+const partial = require('lodash/partial');
+const async = require('async');
+const fn = require('..');
 
 process.chdir(__dirname);
 
-test.cb('handle multiple parallel calls', t => {
+test.cb('handle multiple parallel calls', (t) => {
   async.parallel(
     {
       DOCUMENT_ROOT: partial(fn, 'env/DOCUMENT_ROOT.php'),
