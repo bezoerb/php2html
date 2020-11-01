@@ -1,6 +1,6 @@
 {
   "name": "php2html",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "description": "Convert php files to html",
   "license": "MIT",
   "repository": "bezoerb/php2html",
