@@ -14,7 +14,7 @@
   },
   "scripts": {
     "test": "xo && nyc ava --timeout 5m",
-    "report": "nyc report --reporter=text-lcov"
+    "report": "nyc report --reporter=text-lcov > ./lcov.info"
   },
   "preferGlobal": true,
   "main": "index.js",

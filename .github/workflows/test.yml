@@ -59,3 +59,4 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu') && contains(matrix.node,'12') && contains(matrix.php,'7.2')
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
+          path-to-lcov: './lcov.info'
