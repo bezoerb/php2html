@@ -16,6 +16,7 @@ const tmp = require('tmp');
 const updateNotifier = require('update-notifier');
 const php2html = require('.');
 
+tmp.setGracefulCleanup();
 const {packageJson} = readPkgUp.sync();
 
 const help = [
@@ -54,26 +55,26 @@ const cli = meow({
 // Cleanup cli flags and assert cammelcase keeps camelcase
 cli.flags = reduce(
   cli.flags,
-  (res, val, key) => {
+  (result, value, key) => {
     if (key.length <= 1) {
-      return res;
+      return result;
     }
 
     switch (key) {
       case 'processlinks':
-        res.processLinks = val;
+        result.processLinks = value;
         break;
       case 'basedir':
-        res.baseDir = val;
+        result.baseDir = value;
         break;
       case 'getdata':
-        res.getData = val;
+        result.getData = value;
         break;
       default:
-        res[key] = val;
+        result[key] = value;
     }
 
-    return res;
+    return result;
   },
   {}
 );
@@ -105,25 +106,26 @@ function prepare(data) {
   // Check for references to original file
   const check = data.match(/(__DIR__)|(__FILE__)/);
   if (check) {
-    const msg = '"' + compact(tail(check)).join('" and "') + '" detected. This can\'t be resolved for piped content.';
-    return logError(new Error(msg));
+    const message =
+      '"' + compact(tail(check)).join('" and "') + '" detected. This can\'t be resolved for piped content.';
+    return logError(new Error(message));
   }
 
   tmp.file(
     {
-      dir: cli.flags.baseDir || process.cwd(),
+      tmpdir: cli.flags.baseDir || process.cwd(),
       prefix: '.cli-temp-',
       postfix: '.php',
     },
     (error, filepath, fd, cleanupCallback) => {
-      process.on('exit', cleanupCallback);
-      process.on('cleanup', cleanupCallback);
-      process.on('uncaughtException', cleanupCallback);
+      process.on('exit', () => cleanupCallback());
+      process.on('cleanup', () => cleanupCallback());
+      process.on('uncaughtException', () => cleanupCallback());
 
       if (error) {
         logError(error);
       } else {
-        fs.writeFile(filepath, data, err => (err && logError(error)) || run(filepath));
+        fs.writeFile(filepath, data, (err) => (err && logError(error)) || run(filepath));
       }
     }
   );
@@ -131,8 +133,8 @@ function prepare(data) {
 
 function run(data) {
   php2html(data, cli.flags)
-    .then(val => process.stdout.write(val))
-    .catch(error => logError(error));
+    .then((value) => process.stdout.write(value))
+    .catch((error) => logError(error));
 }
 
 if (cli.input[0]) {

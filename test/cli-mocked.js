@@ -4,7 +4,7 @@ const mockery = require('mockery');
 
 process.chdir(__dirname);
 
-test.beforeEach(t => {
+test.beforeEach((t) => {
   t.context.origArgv = process.argv;
   t.context.origExit = process.exit;
   t.context.bin = '../cli.js';
@@ -13,13 +13,13 @@ test.beforeEach(t => {
     useCleanCache: true,
   });
 
-  mockery.registerMock('.', (file, opts) => {
-    t.context.mockOpts = opts;
-    return new Promise(resolve => resolve(''));
+  mockery.registerMock('.', (file, options) => {
+    t.context.mockOpts = options;
+    return Promise.resolve('');
   });
 });
 
-test.afterEach(t => {
+test.afterEach((t) => {
   mockery.resetCache();
   mockery.deregisterAll();
   mockery.disable();
@@ -27,7 +27,7 @@ test.afterEach(t => {
   process.exit = t.context.origExit;
 });
 
-test.serial('pass the correct opts when using short opts', t => {
+test.serial('pass the correct opts when using short opts', (t) => {
   process.argv = [
     'node',
     path.resolve(t.context.bin),
@@ -49,7 +49,7 @@ test.serial('pass the correct opts when using short opts', t => {
   t.is(t.context.mockOpts.getData.mocked, true);
 });
 
-test.serial('pass the correct opts when using long opts', t => {
+test.serial('pass the correct opts when using long opts', (t) => {
   process.argv = [
     'node',
     path.resolve(t.context.bin),

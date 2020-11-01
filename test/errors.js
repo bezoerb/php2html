@@ -3,7 +3,7 @@ const fn = require('..');
 
 process.chdir(__dirname);
 
-test.cb('fail without input', t => {
+test.cb('fail without input', (t) => {
   fn(undefined, (err, data) => {
     t.is(data, undefined);
     t.truthy(err && err.message);
@@ -12,7 +12,7 @@ test.cb('fail without input', t => {
   });
 });
 
-test.cb('fail on missing file', t => {
+test.cb('fail on missing file', (t) => {
   fn('missing', (err, data) => {
     t.is(data, undefined);
     t.truthy(err && err.message);
@@ -22,7 +22,7 @@ test.cb('fail on missing file', t => {
   });
 });
 
-test.cb('fail on empty file', t => {
+test.cb('fail on empty file', (t) => {
   fn('fixtures/empty.php', (err, data) => {
     /* jshint expr: true */
     t.falsy(data);
@@ -32,7 +32,7 @@ test.cb('fail on empty file', t => {
   });
 });
 
-test.cb('fail on unprocessable files', t => {
+test.cb('fail on unprocessable files', (t) => {
   fn('fixtures/nophp.txt', (err, data) => {
     /* jshint expr: true */
     t.falsy(data);
