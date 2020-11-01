@@ -1,0 +1,62 @@
+name: Tests
+on: [push, pull_request]
+env:
+  CI: true
+
+jobs:
+  run:
+    name: Node ${{ matrix.node }} with ${{ matrix.php }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [10, 12, 14]
+        php: ['7.0', '7.1', '7.2']
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: ${{ matrix.php }}
+          extension-csv: mbstring, intl #optional, setup extensions
+          ini-values-csv: post_max_size=256M #optional, setup php.ini configuration
+
+      - name: PHP Version
+        run: php -v
+
+      - name: Set Node.js version
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Set Node.js version
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+
+      - run: node --version
+      - run: npm --version
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Report coverage
+        if: startsWith(matrix.os, 'ubuntu') && contains(matrix.node,'12') && contains(matrix.php,'7.2')
+        run: npm run report
+
+      - name: Run Coveralls
+        uses: coverallsapp/github-action@master
+        if: startsWith(matrix.os, 'ubuntu') && contains(matrix.node,'12') && contains(matrix.php,'7.2')
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
+          path-to-lcov: './lcov.info'

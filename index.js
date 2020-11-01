@@ -49,12 +49,7 @@ const getUri = (docroot, file, strict) => {
     file = path.resolve(file);
   }
 
-  if (win32) {
-    // Use the correct slashes for uri
-    uri = file.replace(docroot, '').replace(/\\/g, '/');
-  } else {
-    uri = file.replace(docroot, '');
-  }
+  uri = win32 ? file.replace(docroot, '').replace(/\\/g, '/') : file.replace(docroot, '');
 
   // Ensure that we have an absolute url
   if (!uri.startsWith('/')) {

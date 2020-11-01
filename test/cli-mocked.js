@@ -15,7 +15,7 @@ test.beforeEach((t) => {
 
   mockery.registerMock('.', (file, options) => {
     t.context.mockOpts = options;
-    return new Promise((resolve) => resolve(''));
+    return Promise.resolve('');
   });
 });
 

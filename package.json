@@ -13,8 +13,8 @@
     "node": ">=10"
   },
   "scripts": {
-    "test": "xo && nyc ava",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+    "test": "xo && nyc ava --timeout 5m",
+    "report": "nyc report --reporter=text-lcov > ./lcov.info"
   },
   "preferGlobal": true,
   "main": "index.js",
@@ -30,39 +30,39 @@
     "chalk": "^4.1.0",
     "connect": "^3.7.0",
     "connect-modrewrite": "^0.10.2",
-    "debug": "^4.1.1",
+    "debug": "^4.2.0",
     "gateway": "^1.0.0",
     "get-port": "^5.1.1",
     "get-stdin": "^8.0.0",
     "htmlhint": "^0.14.1",
     "indent-string": "^4.0.0",
     "lodash": "^4.17.20",
-    "meow": "^7.1.1",
+    "meow": "^8.0.0",
     "qs": "^6.9.4",
     "request": "^2.88.2",
     "shelljs": "^0.8.4",
     "tempfile": "^3.0.0",
     "tmp": "^0.2.1",
-    "update-notifier": "^4.1.1"
+    "update-notifier": "^5.0.1"
   },
   "devDependencies": {
-    "ava": "^3.12.1",
+    "ava": "^3.13.0",
     "coveralls": "^3.1.0",
-    "execa": "^4.0.3",
+    "execa": "^4.1.0",
     "mockery": "^2.1.0",
     "normalize-newline": "^3.0.0",
     "nyc": "^15.1.0",
     "pify": "^5.0.0",
-    "read-package-json": "^2.1.2",
+    "read-package-json": "^3.0.0",
     "read-pkg-up": "^7.0.1",
-    "xo": "^0.33.1"
+    "xo": "^0.34.1"
   },
   "xo": {
     "space": 2,
     "prettier": true,
     "rules": {
       "promise/prefer-await-to-then": "off",
-      "no-promise-executor-return": "off"
+      "prefer-named-capture-group": "off"
     }
   },
   "prettier": {

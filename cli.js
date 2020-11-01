@@ -16,6 +16,7 @@ const tmp = require('tmp');
 const updateNotifier = require('update-notifier');
 const php2html = require('.');
 
+tmp.setGracefulCleanup();
 const {packageJson} = readPkgUp.sync();
 
 const help = [
@@ -119,9 +120,9 @@ function prepare(data) {
       postfix: '.php',
     },
     (error, filepath, fd, cleanupCallback) => {
-      process.on('exit', cleanupCallback);
-      process.on('cleanup', cleanupCallback);
-      process.on('uncaughtException', cleanupCallback);
+      process.on('exit', () => cleanupCallback());
+      process.on('cleanup', () => cleanupCallback());
+      process.on('uncaughtException', () => cleanupCallback());
 
       if (error) {
         logError(error);
