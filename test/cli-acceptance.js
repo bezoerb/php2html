@@ -35,7 +35,7 @@ const pipe = async (cmd) => {
 
 test('return the version', async (t) => {
   const {packageJson: pkg} = await readPkgUp();
-  const {stderr, stdout} = await run(['--version', '--no-update-notifier']);
+  const {stderr, stdout} = await run(['--version']);
   t.falsy(stderr);
   t.is(stdout.replace(/\r\n|\n/g, ''), pkg.version);
 });
