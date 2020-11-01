@@ -10,7 +10,7 @@
     "url": "sommerlaune.com"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "scripts": {
     "test": "xo && nyc ava",
@@ -61,7 +61,8 @@
     "space": 2,
     "prettier": true,
     "rules": {
-      "promise/prefer-await-to-then": "off"
+      "promise/prefer-await-to-then": "off",
+      "prefer-named-capture-group": "off"
     }
   },
   "prettier": {
