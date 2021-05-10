@@ -13,8 +13,7 @@
     "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
   },
   "scripts": {
-    "test": "xo && nyc ava --timeout 5m",
-    "report": "nyc report --reporter=text-lcov > ./lcov.info"
+    "test": "xo && c8 --reporter=lcovonly ava --timeout 5m"
   },
   "type": "module",
   "exports": "./index.js",
@@ -49,16 +48,17 @@
   },
   "devDependencies": {
     "ava": "^3.15.0",
+    "c8": "^7.7.2",
     "coveralls": "^3.1.0",
     "execa": "^5.0.0",
     "mockery": "^2.1.0",
     "normalize-newline": "^4.1.0",
-    "nyc": "^15.1.0",
     "pify": "^5.0.0",
     "read-package-json": "^3.0.1",
     "read-pkg-up": "^8.0.0",
     "xo": "^0.40.0"
   },
+  "nyc": {},
   "xo": {
     "space": 2,
     "prettier": true,
