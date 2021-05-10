@@ -11,8 +11,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [10, 12, 14]
-        php: ['7.0', '7.1', '7.2']
+        node: [12, 14, 16]
+        php: ['7.4']
         os: [ubuntu-latest, windows-latest]
 
     steps:
@@ -51,12 +51,12 @@ jobs:
         run: npm test
 
       - name: Report coverage
-        if: startsWith(matrix.os, 'ubuntu') && contains(matrix.node,'12') && contains(matrix.php,'7.2')
+        if: startsWith(matrix.os, 'ubuntu') && contains(matrix.node,'12') && contains(matrix.php,'7.4')
         run: npm run report
 
       - name: Run Coveralls
         uses: coverallsapp/github-action@master
-        if: startsWith(matrix.os, 'ubuntu') && contains(matrix.node,'12') && contains(matrix.php,'7.2')
+        if: startsWith(matrix.os, 'ubuntu') && contains(matrix.node,'12') && contains(matrix.php,'7.4')
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
           path-to-lcov: './lcov.info'

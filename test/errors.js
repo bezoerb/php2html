@@ -1,6 +1,9 @@
-const test = require('ava');
-const fn = require('..');
+import {fileURLToPath} from 'node:url';
+import test from 'ava';
+import path from 'node:path';
+import fn from '../index.js';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 process.chdir(__dirname);
 
 test.cb('fail without input', (t) => {

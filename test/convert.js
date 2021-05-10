@@ -1,7 +1,11 @@
-const fs = require('fs');
-const test = require('ava');
-const nn = require('normalize-newline');
-const fn = require('..');
+import {fileURLToPath} from 'node:url';
+import fs from 'node:fs';
+import path from 'node:path';
+import test from 'ava';
+import nn from 'normalize-newline';
+import fn from '../index.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const read = (file, cb) => fs.readFile(file, 'utf-8', (error, data) => cb(error, nn(data)));
 

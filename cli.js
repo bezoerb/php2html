@@ -1,21 +1,21 @@
 #!/usr/bin/env node
-const os = require('os');
-const fs = require('fs');
-const path = require('path');
-const meow = require('meow');
-const chalk = require('chalk');
-const indentString = require('indent-string');
-const stdin = require('get-stdin');
-const tail = require('lodash/tail');
-const compact = require('lodash/compact');
-const reduce = require('lodash/reduce');
-const readPkgUp = require('read-pkg-up');
-const tmp = require('tmp');
-const updateNotifier = require('update-notifier');
-const php2html = require('.');
+import os from 'node:os';
+import fs from 'node:fs';
+import path from 'node:path';
+import meow from 'meow';
+import chalk from 'chalk';
+import indentString from 'indent-string';
+import stdin from 'get-stdin';
+import tail from 'lodash/tail.js';
+import compact from 'lodash/compact.js';
+import reduce from 'lodash/reduce.js';
+import {readPackageUpSync} from 'read-pkg-up';
+import tmp from 'tmp';
+import updateNotifier from 'update-notifier';
+import php2html from './index.js';
 
 tmp.setGracefulCleanup();
-const {packageJson} = readPkgUp.sync();
+const {packageJson} = readPackageUpSync();
 
 const help = [
   'Usage: php2html <input> [<option>]',
@@ -31,7 +31,7 @@ tmp.setGracefulCleanup();
 
 const cli = meow({
   help,
-  packageJson,
+  importMeta: import.meta,
   flags: {
     baseDir: {
       type: 'string',

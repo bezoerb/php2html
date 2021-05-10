@@ -1,9 +1,11 @@
-const path = require('path');
-const test = require('ava');
-const partial = require('lodash/partial');
-const async = require('async');
-const fn = require('..');
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
+import test from 'ava';
+import partial from 'lodash/partial.js';
+import async from 'async';
+import fn from '../index.js';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 process.chdir(__dirname);
 
 test.cb('handle multiple parallel calls', (t) => {

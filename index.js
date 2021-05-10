@@ -1,20 +1,20 @@
-const path = require('path');
-const fs = require('fs');
-const http = require('http');
-const connect = require('connect');
-const modRewrite = require('connect-modrewrite');
-const request = require('request');
-const gateway = require('gateway');
-const getPort = require('get-port');
-const debugFn = require('debug');
-const qs = require('qs');
-const shell = require('shelljs');
+import path from 'node:path';
+import fs from 'node:fs';
+import http from 'node:http';
+import connect from 'connect';
+import modRewrite from 'connect-modrewrite';
+import request from 'request';
+import gateway from 'gateway';
+import getPort from 'get-port';
+import debugFn from 'debug';
+import qs from 'qs';
+import shell from 'shelljs';
 
-const size = require('lodash/size');
-const defaults = require('lodash/defaults');
-const isObject = require('lodash/isObject');
-const isFunction = require('lodash/isFunction');
-const Bluebird = require('bluebird');
+import size from 'lodash/size.js';
+import defaults from 'lodash/defaults.js';
+import isObject from 'lodash/isObject.js';
+import isFunction from 'lodash/isFunction.js';
+import Bluebird from 'bluebird';
 
 const debug = debugFn('php2html:core');
 
@@ -174,7 +174,7 @@ function compile(file, options) {
     .then(({server, url}) => fetchHtml(url, options).finally(() => server.close()));
 }
 
-function php2html(file, options_, cb) {
+export function php2html(file, options_, cb) {
   if (isFunction(options_) && !cb) {
     cb = options_;
     options_ = {};
@@ -206,4 +206,4 @@ function php2html(file, options_, cb) {
   }
 }
 
-module.exports = php2html;
+export default php2html;

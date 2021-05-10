@@ -1,10 +1,12 @@
-const fs = require('fs');
-const path = require('path');
-const test = require('ava');
-const execa = require('execa');
-const readPkgUp = require('read-pkg-up');
-const nn = require('normalize-newline');
+import {fileURLToPath} from 'node:url';
+import fs from 'node:fs';
+import path from 'node:path';
+import test from 'ava';
+import execa from 'execa';
+import {readPackageUpAsync} from 'read-pkg-up';
+import nn from 'normalize-newline';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 process.chdir(path.resolve(__dirname));
 
 const read = (file) =>
@@ -19,7 +21,7 @@ const read = (file) =>
   });
 
 const getBin = async () => {
-  const {packageJson: pkg} = await readPkgUp();
+  const {packageJson: pkg} = await readPackageUpAsync();
   return path.join(__dirname, '../', pkg.bin.php2html);
 };
 
@@ -34,7 +36,7 @@ const pipe = async (cmd) => {
 };
 
 test('return the version', async (t) => {
-  const {packageJson: pkg} = await readPkgUp();
+  const {packageJson: pkg} = await readPackageUpAsync();
   const {stderr, stdout} = await run(['--version']);
   t.falsy(stderr);
   t.is(stdout.replace(/\r\n|\n/g, ''), pkg.version);

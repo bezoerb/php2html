@@ -7,17 +7,19 @@
   "author": {
     "name": "Ben Zörb",
     "email": "ben@sommerlaune.com",
-    "url": "sommerlaune.com"
+    "url": "https://www.sommerlaune.com"
   },
   "engines": {
-    "node": ">=10"
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
   },
   "scripts": {
     "test": "xo && nyc ava --timeout 5m",
     "report": "nyc report --reporter=text-lcov > ./lcov.info"
   },
+  "type": "module",
+  "exports": "./index.js",
   "preferGlobal": true,
-  "main": "index.js",
+  "main": "index.cjs",
   "bin": "cli.js",
   "keywords": [
     "php",
@@ -33,11 +35,11 @@
     "debug": "^4.3.1",
     "gateway": "^1.0.0",
     "get-port": "^5.1.1",
-    "get-stdin": "^8.0.0",
+    "get-stdin": "^9.0.0",
     "htmlhint": "^0.14.2",
-    "indent-string": "^4.0.0",
+    "indent-string": "^5.0.0",
     "lodash": "^4.17.21",
-    "meow": "^8.0.0",
+    "meow": "^10.0.0",
     "qs": "^6.10.1",
     "request": "^2.88.2",
     "shelljs": "^0.8.4",
@@ -48,13 +50,13 @@
   "devDependencies": {
     "ava": "^3.15.0",
     "coveralls": "^3.1.0",
-    "execa": "^4.1.0",
+    "execa": "^5.0.0",
     "mockery": "^2.1.0",
-    "normalize-newline": "^3.0.0",
+    "normalize-newline": "^4.1.0",
     "nyc": "^15.1.0",
     "pify": "^5.0.0",
     "read-package-json": "^3.0.1",
-    "read-pkg-up": "^7.0.1",
+    "read-pkg-up": "^8.0.0",
     "xo": "^0.40.0"
   },
   "xo": {
@@ -62,8 +64,7 @@
     "prettier": true,
     "rules": {
       "promise/prefer-await-to-then": "off",
-      "prefer-named-capture-group": "off",
-      "unicorn/prefer-module": "off"
+      "prefer-named-capture-group": "off"
     }
   },
   "prettier": {
