@@ -17,8 +17,8 @@ test.cb('handle multiple parallel calls', (t) => {
       SERVER_NAME: partial(fn, 'env/SERVER_NAME.php', {requestHost: 'sommerlaune.com:123'}),
       SERVER_PORT: partial(fn, 'env/SERVER_PORT.php', {requestHost: 'sommerlaune.com:123'}),
     },
-    (err, data) => {
-      t.falsy(err);
+    (error, data) => {
+      t.falsy(error);
       t.is(data.DOCUMENT_ROOT, process.cwd());
       t.is(data.PHP_SELF, '/env/PHP_SELF.php');
       t.is(data.REQUEST_URI, '/env/REQUEST_URI.php');

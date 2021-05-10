@@ -124,15 +124,15 @@ const fetchHtml = (url, options) =>
       // Replace relative php links with corresponding html link
       if (body && options.processLinks) {
         const linkRegex = /href=['"]([^'"]+\.php(?:\?[^'"]*)?)['"]/gm;
-        (body.match(linkRegex) || []).forEach((link) => {
-          if (link.match(/:\/\//)) {
-            return;
+        for (const link of body.match(linkRegex) || []) {
+          if (/:\/\//.test(link)) {
+            continue;
           }
 
           const hlink = link.replace(/(\w)\.php(\W)/g, '$1.html$2');
 
           body = body.replace(link, hlink);
-        });
+        }
       }
 
       resolve(body);

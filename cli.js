@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-'use strict';
-
 const os = require('os');
 const fs = require('fs');
 const path = require('path');
@@ -93,8 +91,8 @@ if (cli.flags['update-notifier'] !== false) {
   updateNotifier({pkg: packageJson}).notify();
 }
 
-function logError(err) {
-  process.stderr.write(indentString(chalk.red('Error: ' + err.message || err), 3));
+function logError(error) {
+  process.stderr.write(indentString(chalk.red('Error: ' + error.message || error), 3));
   process.stderr.write(os.EOL);
   process.stderr.write(indentString(help, 3));
   process.exit(1);
@@ -127,7 +125,7 @@ function prepare(data) {
       if (error) {
         logError(error);
       } else {
-        fs.writeFile(filepath, data, (err) => (err && logError(error)) || run(filepath));
+        fs.writeFile(filepath, data, (error_) => (error_ && logError(error)) || run(filepath));
       }
     }
   );
